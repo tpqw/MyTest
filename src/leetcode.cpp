@@ -7,6 +7,7 @@ Author:fwg
 Date:2018.3.24
 **********************/
 
+//BFS求树最小深度
 class Solution {
 public:
     int run(TreeNode *root) {
@@ -45,5 +46,75 @@ public:
             }
         }
         return minheight;
+    }
+};
+
+/** 
+Given a binary tree, return the preorder traversal of its nodes' values. 
+For example:
+Given binary tree{1,#,2,3}, 
+   1
+    \
+     2
+    /
+   3
+
+return[1,2,3]. 
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//递归求二叉树的前序遍历
+class Solution {
+public:
+    void helper(TreeNode *root)
+    {
+        if (root != NULL)
+        {
+            res.push_back(root->val);
+            helper(root->left);
+            helper(root->right);
+        }
+    }
+    vector<int> preorderTraversal(TreeNode *root) {
+        helper(root);
+        return res;
+    }
+private:
+    vector<int> res;
+};
+
+//迭代求二叉树的前序遍历
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode *root) {
+        vector<int> res;
+        stack<TreeNode*> stNode;
+        if (root == NULL)
+        {
+            return res;
+        }
+        stNode.push(root);
+        TreeNode* tmpNode;
+        while (!stNode.empty())
+        {
+            tmpNode = stNode.top();
+            stNode.pop();
+            res.push_back(tmpNode->val);
+            if (tmpNode->right != NULL)
+            {
+                stNode.push(tmpNode->right);
+            }
+            if (tmpNode->left != NULL)
+            {
+                stNode.push(tmpNode->left);
+            }
+        }
+        return res;
     }
 };
