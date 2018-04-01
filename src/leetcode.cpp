@@ -118,3 +118,25 @@ public:
         return res;
     }
 };
+
+//罗马数到整数的转换，罗马数某个字母前面至多一个比它小，后面至多3个比它大
+class Solution {
+public:
+    int romanToInt(string s) {
+        map<char,int> mRTI{{'I', 1}, {'V', 5}, {'X', 10}, {'L', 50}, 
+			{'C', 100}, {'D', 500}, {'M', 1000}};
+        int res = mRTI[s[0]];
+        for (int i = 1; i < s.size(); i++)
+        {
+            if (mRTI[s[i]] <= mRTI[s[i - 1]])
+            {
+                res += mRTI[s[i]];
+            }
+            else
+            {
+                res += mRTI[s[i]] - 2 * mRTI[s[i - 1]];
+            }
+        }
+        return res;
+    }
+};
