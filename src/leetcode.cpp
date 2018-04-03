@@ -140,3 +140,274 @@ public:
         return res;
     }
 };
+
+//The longest common prefix between multiple strings.
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string res;
+        if (!strs.size())
+        {
+            return res;
+        }
+        for (int i = 0; i < strs[0].size(); i++)
+        {
+            char tmpchar = strs[0][i];
+            for (auto s : strs)
+            {
+                if (i > s.size() || tmpchar != s[i])
+                {
+                    return res;
+                }
+            }
+            res += tmpchar;
+        }
+        return res;
+    }
+};
+
+//有效的括号，使用栈进行处理
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stk;
+        for (int i = 0; i < s.size(); i++)
+        {
+            char tmpchar = s[i];
+            switch (tmpchar)
+            {
+                case '(':
+                case '{':
+                case '[':
+                    stk.push(tmpchar);
+                    break;
+                case ')':
+                    if (stk.empty() || stk.top() != '(')
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        stk.pop();
+                    }
+                    break;
+                case '}':
+                    if (stk.empty() || stk.top() != '{')
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        stk.pop();
+                    }
+                    break;
+                case ']':
+                    if (stk.empty() || stk.top() != '[')
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        stk.pop();
+                    }
+                    break;
+                default:
+                    return false;
+                        
+            }
+        }
+        if (!stk.empty())
+        {
+            return false;
+        }
+        return true;
+    }
+};
+
+//合并两个有序列表，使用递归
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == NULL)
+        {
+            return l2;
+        }
+        if (l2 == NULL)
+        {
+            return l1;
+        }
+        if (l1->val > l2->val)
+        {
+            l2->next = mergeTwoLists(l1, l2->next);
+            return l2;
+        }
+        else
+        {
+            l1->next = mergeTwoLists(l1->next, l2);
+            return l1;
+        }
+    }
+};
+
+//移除有序数组中相邻重复的多余元素
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if (nums.empty())
+        {
+            return 0;
+        }
+        
+        int newBack = 0, cur = 1, len = nums.size();
+        while (cur < len)
+        {
+            if (nums[newBack] == nums[cur])
+            {
+                cur++;
+            }
+            else
+            {
+                nums[++newBack] = nums[cur++];
+            }
+        }
+        
+        return newBack + 1;
+    }
+};
+
+//移除数组中指定元素
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        if (nums.empty())
+        {
+            return 0;
+        }
+        int newback = 0, cur = 0, len = nums.size();
+        while (cur < len)
+        {
+            if (nums[cur] == val)
+            {
+                cur++;
+            }
+            else
+            {
+                nums[newback++] = nums[cur++];
+            }
+        }
+        return newback;
+    }
+};
+
+//实现 strStr()。
+//返回蕴含在 haystack 中的 needle 的第一个字符的索引，如果 needle 不是 haystack 的一部分则返回 -1 
+//使用KMP算法
+class Solution {
+public:
+    void getnext(const string &str, int next[])
+    {
+        int i = 0, j = -1;
+        next[0] = -1;
+        int n = str.size();
+        while (i < n)
+        {
+            if (j == -1 || str[i] == str[j])
+            {
+                next[++i] = ++j;
+            }
+            else
+            {
+                j = next[j];
+            }
+        }
+        
+    }
+    int strStr(string haystack, string needle) {
+        if (needle.empty())
+        {
+            return 0;
+        }
+        int m = haystack.size();
+        int n = needle.size();
+        int i = 0, j = 0;
+        int next[n];
+        getnext(needle, next);
+        while (i < m && j < n)
+        {
+            if (j == -1 || haystack[i] == needle[j])
+            {
+                i++;
+                j++;
+            }
+            else
+            {
+                j = next[j];
+            }
+        }
+        if (j == n)
+        {
+            return i - j;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+};
+
+//给定一个排序数组和一个目标值，如果在数组中找到目标值则返回索引。如果没有，返回到它将会被按顺序插入的位置。
+//你可以假设在数组中无重复元素。
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        if (nums.empty())
+        {
+            return 0;
+        }
+        int i = 0;
+        while (i < nums.size())
+        {
+            if (nums[i] >= target)
+            {
+                return i;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return i;
+    }
+};
+
+//给定一个字符串， 包含大小写字母、空格 ' '，请返回其最后一个单词的长度。
+//如果不存在最后一个单词，请返回 0 。
+//注意事项：一个单词的界定是，由字母组成，但不包含任何的空格。
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        if (s.empty())
+        {
+            return 0;
+        }
+        int end = s.size() - 1;
+        while (end >= 0 && s[end] == ' ')
+        {
+            end--;
+        }
+        int p = end;
+        while (p >= 0 && s[p] != ' ')
+        {
+            p--;
+        }
+        return end - p;
+    }
+};
