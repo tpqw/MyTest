@@ -119,6 +119,42 @@ public:
     }
 };
 
+//另附迭代求中序遍历
+vector<int> inOrderTraversal(Node* root)
+{
+	vector<int> res;
+	if (root == NULL)
+	{
+		return res;
+	}
+	stack<Node*> s;
+	Node* tmpNode;
+	Node* tmpChildNode;
+	s.push(root);
+	while (!s.empty())
+	{
+		tmpNode = s.top();
+		s.pop();
+		if (tmpNode->left == NULL)
+		{
+			res.push_back(tmpNode->val);
+		}
+		if (tmpNode->right != NULL)
+		{
+			s.push(tmpNode->right);
+		}
+		if (tmpNode->left != NULL)
+		{
+			tmpChildNode = tmpNode->left;
+			tmpNode->left = NULL;
+			tmpNode->right = NULL;
+			s.push(tmpNode);
+			s.push(tmpChildNode);
+		}
+	}
+	return res;
+}
+
 //罗马数到整数的转换，罗马数某个字母前面至多一个比它小，后面至多3个比它大
 class Solution {
 public:
@@ -363,7 +399,8 @@ public:
     }
 };
 
-//给定一个排序数组和一个目标值，如果在数组中找到目标值则返回索引。如果没有，返回到它将会被按顺序插入的位置。
+//给定一个排序数组和一个目标值，如果在数组中找到目标值则返回索引。
+//如果没有，返回到它将会被按顺序插入的位置。
 //你可以假设在数组中无重复元素。
 class Solution {
 public:
@@ -409,5 +446,48 @@ public:
             p--;
         }
         return end - p;
+    }
+};
+
+//给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1中，使得 num1 成为一个有序数组。
+//注意:
+//你可以假设 nums1有足够的空间（空间大小大于或等于m + n）来保存 nums2 中的元素。
+//在 nums1 和 nums2 中初始化的元素的数量分别是 m 和 n。
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        m--;
+        n--;
+        while (m >= 0 && n >= 0)
+        {
+            if (nums1[m] <= nums2[n])
+            {
+                nums1[m+n+1] = nums2[n--];
+            }
+            else
+            {
+                nums1[m+n+1] = nums1[m--];
+            }
+        }
+        while (n >= 0)
+        {
+            nums1[n] = nums2[n--];
+        }
+    }
+};
+
+//给定一个序列（至少含有 1 个数），从该序列中寻找一个连续的子序列，使得子序列的和最大。
+//例如，给定序列 [-2,1,-3,4,-1,2,1,-5,4]，
+//连续子序列 [4,-1,2,1] 的和最大，为 6。
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res = INT_MIN, tmpSum = 0;
+        for (auto num : nums)
+        {
+            tmpSum = max(tmpSum + num, num);
+            res =  max(tmpSum, res);
+        }
+        return res;
     }
 };
